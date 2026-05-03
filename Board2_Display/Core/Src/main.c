@@ -152,6 +152,7 @@ int main(void)
 	if (now - last_frame_tick >= 16) {
       last_frame_tick = now;
 	  sim_tick();
+	  uart_rx_buffer_process();
 	  animation_tick();
 	}
   }
