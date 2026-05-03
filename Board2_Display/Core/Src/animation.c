@@ -83,7 +83,7 @@ typedef struct {
     uint8_t  growing;
     uint8_t  note_name;
     uint8_t  accidental;
-    uint8_t  octave;     /* stored so stop_growing() can disambiguate same-name notes */
+    uint8_t  octave;     /* stored to compute visual block for stop_growing match */
 } ActiveNote;
 
 static ActiveNote notes[MAX_ACTIVE_NOTES];
@@ -205,7 +205,13 @@ static volatile uint8_t eq_tail = 0;
 
 uint8_t animation_queue_event(const NoteEvent *evt) {
     uint8_t next = (eq_head + 1u) % EVENT_QUEUE_SIZE;
-    if (next == eq_tail) return 1;
+    if (next == eq_tail) {
+        /* Queue full — drop oldest entry to make room so that release
+         * events (VEL_KEY_UP) are never lost. A dropped press is less
+         * harmful than a dropped release (which leaves a note growing
+         * permanently). */
+        eq_tail = (eq_tail + 1u) % EVENT_QUEUE_SIZE;
+    }
     event_queue[eq_head] = *evt;
     eq_head = next;
     return 0;
@@ -246,12 +252,26 @@ static void spawn_note(const NoteEvent *evt) {
     }
 }
 
+/*
+ * Resolve an octave value to its visual block index (0 or 1) on the
+ * 64px display. Notes that are an octave apart wrap to the same block
+ * so that e.g. C4 with octaveOffset=0 and C4 with octaveOffset=+2
+ * land on the same physical column. This is the same wrapping used
+ * by resolve_note_visual() during spawn.
+ */
+static uint8_t octave_to_visual_block(uint8_t oct)
+{
+    int8_t diff = (int8_t)oct - (int8_t)BASE_OCTAVE;
+    return (uint8_t)(((int8_t)(diff % 2) + 2) % 2);
+}
+
 static void stop_growing(const NoteEvent *evt) {
+    uint8_t evt_block = octave_to_visual_block(evt->octave);
     for (int i = MAX_ACTIVE_NOTES - 1; i >= 0; i--) {
         if (notes[i].active && notes[i].growing &&
             notes[i].note_name  == evt->note_name &&
             notes[i].accidental == evt->accidental &&
-            notes[i].octave     == evt->octave) {
+            octave_to_visual_block(notes[i].octave) == evt_block) {
             notes[i].growing = 0;
             return;
         }
