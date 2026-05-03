@@ -88,6 +88,57 @@ static uint8_t  activeChordKeys = 0;
 /* Press timestamp per playable note key (rows 0..2) for duration_ms. */
 static uint32_t pressTickPerKey[3][NUM_COLS] = {{0}};
 
+/* ── 4-voice rolling window (voice stealing) ──
+ * Holds at most MAX_CHORD_VOICES active chord keys. When a 5th key is
+ * pressed the oldest entry is evicted (Audio_NoteOff + UART note-off).
+ * A release for an already-evicted key is silently ignored. */
+#define MAX_CHORD_VOICES 4
+typedef struct { uint8_t row; uint8_t col; } VoiceSlot;
+static VoiceSlot voiceWindow[MAX_CHORD_VOICES];
+static uint8_t   voiceHead = 0;   /* oldest entry (eviction point) */
+static uint8_t   voiceTail = 0;   /* next insert slot              */
+static uint8_t   voiceCount = 0;
+
+static void VoiceWindow_Push(uint8_t r, uint8_t c)
+{
+    voiceWindow[voiceTail].row = r;
+    voiceWindow[voiceTail].col = c;
+    voiceTail = (voiceTail + 1u) % MAX_CHORD_VOICES;
+    voiceCount++;
+}
+
+static uint8_t VoiceWindow_Pop(uint8_t *r, uint8_t *c)
+{
+    if (voiceCount == 0u) return 0;
+    *r = voiceWindow[voiceHead].row;
+    *c = voiceWindow[voiceHead].col;
+    voiceHead = (voiceHead + 1u) % MAX_CHORD_VOICES;
+    voiceCount--;
+    return 1;
+}
+
+static uint8_t VoiceWindow_FindAndRemove(uint8_t r, uint8_t c)
+{
+    uint8_t idx = voiceHead;
+    for (uint8_t i = 0; i < voiceCount; i++) {
+        if (voiceWindow[idx].row == r && voiceWindow[idx].col == c) {
+            /* Shift remaining entries left to close the gap */
+            uint8_t src = (idx + 1u) % MAX_CHORD_VOICES;
+            for (uint8_t j = i + 1u; j < voiceCount; j++) {
+                voiceWindow[idx] = voiceWindow[src];
+                idx  = src;
+                src  = (src + 1u) % MAX_CHORD_VOICES;
+            }
+            voiceCount--;
+            /* Re-adjust head/tail so the logical ring stays consistent */
+            voiceTail = (voiceHead + voiceCount) % MAX_CHORD_VOICES;
+            return 1;  /* found and removed */
+        }
+        idx = (idx + 1u) % MAX_CHORD_VOICES;
+    }
+    return 0;  /* not in window — was already evicted */
+}
+
 /* Song player state for LCD */
 static const char *currentRiffName = "";
 
@@ -165,16 +216,19 @@ static void LCD_ShowWave(void)
     }
 }
 
-/* Retune every currently held chord voice to the new octave offset. */
+/* Retune every chord voice that is currently in the voice window.
+ * We iterate voiceWindow instead of keyState[][] because an evicted key
+ * may still read HIGH on GPIO (physically held) but must not be retuned —
+ * its audio was already stolen. */
 static void Chord_RetuneAll(void)
 {
-    for (uint8_t r = 0; r < 3; r++) {
-        for (uint8_t c = 0; c < NUM_COLS; c++) {
-            if (keyState[r][c]) {
-                uint8_t voice = (uint8_t)(1u + r * NUM_COLS + c);
-                Audio_NoteOn(voice, GetNoteFreq(r, c));
-            }
-        }
+    uint8_t idx = voiceHead;
+    for (uint8_t i = 0; i < voiceCount; i++) {
+        uint8_t r = voiceWindow[idx].row;
+        uint8_t c = voiceWindow[idx].col;
+        uint8_t voice = (uint8_t)(1u + r * NUM_COLS + c);
+        Audio_NoteOn(voice, GetNoteFreq(r, c));
+        idx = (idx + 1u) % MAX_CHORD_VOICES;
     }
 }
 
@@ -309,11 +363,35 @@ int main(void)
 
 	      if (ev.isPress) {
 	          if (r < 3) {
-	              /* ── Note key PRESS ── */
+	              /* ── Note key PRESS (with 4-voice cap) ── */
+	              if (voiceCount == MAX_CHORD_VOICES) {
+	                  uint8_t evR, evC;
+	                  if (VoiceWindow_Pop(&evR, &evC)) {
+	                      uint8_t evVoice = (uint8_t)(1u + evR * NUM_COLS + evC);
+	                      Audio_NoteOff(evVoice);
+
+	                      uint32_t evHeld = HAL_GetTick() - pressTickPerKey[evR][evC];
+	                      int evBaseOct   = (evR == 0 || (evR == 1 && evC < 4)) ? 4 : 5;
+	                      NoteEvent evEvt = {
+	                          .start_byte  = NOTE_EVENT_START_BYTE,
+	                          .note_name   = noteCode[evR][evC].name,
+	                          .accidental  = noteCode[evR][evC].acc,
+	                          .octave      = (uint8_t)evBaseOct,
+	                          .velocity    = VEL_KEY_UP,
+	                          .duration_ms = (evHeld > 0xFFFFu) ? 0xFFFFu : (uint16_t)evHeld,
+	                          .track_id    = TRACK_LIVE,
+	                          .active      = 0,
+	                      };
+	                      UART_TX_SendNoteEvent(&evEvt);
+	                      if (activeChordKeys > 0) activeChordKeys--;
+	                  }
+	              }
+
 	              if (activeChordKeys == 0) {
 	                  SongPlayer_MuteForKey();
 	              }
 	              activeChordKeys++;
+	              VoiceWindow_Push(r, c);
 
 	              float freq = GetNoteFreq(r, c);
 
@@ -399,6 +477,23 @@ int main(void)
 	      } else {
 	          /* ── Key RELEASE ── */
 	          if (r < 3) {
+	              /* Remove from voice window first. If not found, the key
+	               * was already evicted (stolen) — skip audio/UART to avoid
+	               * corrupting voiceCount or activeChordKeys. */
+	              if (!VoiceWindow_FindAndRemove(r, c)) {
+	                  /* Key was evicted before its release arrived; already
+	                   * sent NoteOff. Just keep state consistent. */
+	                  if (activeChordKeys > 0) activeChordKeys--;
+	                  if (activeChordKeys == 0) {
+	                      LCD_DrawString(70, 30, "     ");
+	                      lastPressedRow = 0xFF;
+	                      lastPressedCol = 0xFF;
+	                      SongPlayer_UnmuteAfterKey();
+	                      LCD_ShowSong(currentRiffName);
+	                  }
+	                  break;
+	              }
+
 	              uint8_t voice = (uint8_t)(1u + r * NUM_COLS + c);
 	              Audio_NoteOff(voice);
 
