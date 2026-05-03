@@ -230,7 +230,12 @@ static void spawn_note(const NoteEvent *evt) {
             notes[i].active     = 1;
             notes[i].col_start  = col;
             notes[i].col_width  = width;
-            notes[i].head_y     = 32;   /* off-screen: hides growing phase */
+            /* Spawn visible at the bottom of the trail region (row 30,
+             * just above the row-31 keyboard indicator). Trail extends
+             * upward each tick while the key is held, so the LED lights
+             * up immediately on press instead of being hidden until
+             * release. */
+            notes[i].head_y     = 30;
             notes[i].length     = 1;
             notes[i].growing    = 1;
             notes[i].note_name  = evt->note_name;
@@ -262,9 +267,8 @@ static void draw_keyboard_row(void) {
         if (!notes[i].active || !notes[i].growing) continue;
         for (int dx = 0; dx < notes[i].col_width; dx++) {
             uint8_t x = notes[i].col_start + (uint8_t)dx;
-            /* Row 33 is imaginary (off-screen) — bounds guard makes this a no-op */
-            if (33 < HUB75_HEIGHT && x < HUB75_WIDTH)
-                fb[fb_back][33][x] = rainbow_row[31];
+            if (x < HUB75_WIDTH)
+                fb[fb_back][HUB75_HEIGHT - 1][x] = rainbow_row[31];
         }
     }
 }
@@ -302,7 +306,14 @@ void animation_tick(void) {
         if (!notes[i].active) continue;
 
         if (notes[i].growing) {
-            notes[i].length++;
+            /* Grow the trail upward while the key is held: bottom edge
+             * stays anchored at row 30, top edge advances toward row 0.
+             * Cap at HUB75_HEIGHT so indefinite holds don't grow length
+             * (and the inner draw loop) without bound. */
+            if (notes[i].length < HUB75_HEIGHT) {
+                notes[i].length++;
+                notes[i].head_y--;
+            }
         } else {
             notes[i].head_y--;
         }
