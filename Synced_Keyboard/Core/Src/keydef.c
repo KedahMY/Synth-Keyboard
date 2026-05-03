@@ -6,15 +6,16 @@ uint8_t keyCounter[NUM_ROWS][NUM_COLS] = {0};
 
 volatile uint8_t currentCol = 0;
 
-/* Press event */
-volatile uint8_t keyEventPending = 0;
-volatile uint8_t keyEventRow     = 0;
-volatile uint8_t keyEventCol     = 0;
+/* SPSC ring buffer: ISR (TIM3 callback) is the sole producer,
+ * the main loop is the sole consumer. Power-of-two size lets us
+ * wrap with a mask, and means head==tail unambiguously means empty. */
+static volatile KeyEvent kev_buf[KEY_EVENT_QUEUE_SIZE];
+static volatile uint8_t  kev_head = 0;   /* next write slot */
+static volatile uint8_t  kev_tail = 0;   /* next read  slot */
 
-/* Release event */
-volatile uint8_t keyReleaseEventPending = 0;
-volatile uint8_t keyReleaseRow          = 0;
-volatile uint8_t keyReleaseCol          = 0;
+#define KEV_MASK  (KEY_EVENT_QUEUE_SIZE - 1)
+_Static_assert((KEY_EVENT_QUEUE_SIZE & KEV_MASK) == 0,
+               "KEY_EVENT_QUEUE_SIZE must be a power of two");
 
 const char *keyMap[NUM_ROWS][NUM_COLS] = {
     {"R0C0","R0C1","R0C2","R0C3","R0C4","R0C5","R0C6","R0C7"},
@@ -34,6 +35,31 @@ GPIO_Map rows[NUM_ROWS] = {
     {GPIOA, Row2_Pin},
     {GPIOA, Row3_Pin}
 };
+
+static void Keypad_PushEvent(uint8_t r, uint8_t c, uint8_t isPress)
+{
+    uint8_t head = kev_head;
+    uint8_t next = (uint8_t)((head + 1u) & KEV_MASK);
+    /* Drop on overflow rather than overwriting unread entries: losing the
+     * newest event is preferable to corrupting the FIFO order of older
+     * pending press/release pairs. */
+    if (next == kev_tail) return;
+    kev_buf[head].row     = r;
+    kev_buf[head].col     = c;
+    kev_buf[head].isPress = isPress;
+    kev_head = next;
+}
+
+uint8_t Keypad_GetEvent(KeyEvent *out)
+{
+    uint8_t tail = kev_tail;
+    if (tail == kev_head) return 0;
+    out->row     = kev_buf[tail].row;
+    out->col     = kev_buf[tail].col;
+    out->isPress = kev_buf[tail].isPress;
+    kev_tail = (uint8_t)((tail + 1u) & KEV_MASK);
+    return 1;
+}
 
 void Keypad_AllColumnsOff(void)
 {
@@ -58,18 +84,7 @@ void Keypad_ScanOneColumn(void)
             if (keyCounter[r][currentCol] >= DEBOUNCE_TICKS) {
                 keyState[r][currentCol]   = rawPressed;
                 keyCounter[r][currentCol] = 0;
-
-                if (rawPressed) {
-                    /* KEY PRESSED */
-                    keyEventPending = 1;
-                    keyEventRow     = r;
-                    keyEventCol     = currentCol;
-                } else {
-                    /* KEY RELEASED */
-                    keyReleaseEventPending = 1;
-                    keyReleaseRow          = r;
-                    keyReleaseCol          = currentCol;
-                }
+                Keypad_PushEvent((uint8_t)r, currentCol, rawPressed);
             }
         } else {
             keyCounter[r][currentCol] = 0;

@@ -112,6 +112,7 @@ void sim_tick(void) {
         /* Key-down: start the note falling */
         evt.velocity    = 80;
         evt.duration_ms = 0;
+        evt.active      = 1;
         animation_queue_event(&evt);
 
         sim_key_held      = 1;
@@ -120,6 +121,7 @@ void sim_tick(void) {
         /* Key-up: freeze the falling block so it scrolls off */
         evt.velocity    = 0;
         evt.duration_ms = NOTE_HOLD_MS;
+        evt.active      = 0;
         animation_queue_event(&evt);
 
         sim_key_held  = 0;

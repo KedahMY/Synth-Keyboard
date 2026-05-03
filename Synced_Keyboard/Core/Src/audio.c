@@ -9,12 +9,27 @@ uint16_t audioBuf[AUDIO_FULL_SIZE];
 static DAC_HandleTypeDef *_hdac  = NULL;
 static TIM_HandleTypeDef *_htim8 = NULL;
 
-/* ── Playback state ── */
-static const uint16_t  *currentWave = NULL;
-static volatile float   phaseAcc    = 0.0f;
-static volatile float   phaseInc    = 0.0f;
-
+/* ── Wavetable ── */
+static const uint16_t *currentWave = NULL;
 #define TABLE_SIZE  256.0f
+
+/* ── Voice bank ──
+ * phaseInc == 0 means the voice is silent. freq is retained so we can
+ * recompute phaseInc when the sample rate changes.
+ *
+ * volatile: written by main-thread (Audio_NoteOn/Off) and read inside the
+ * DAC DMA ISR (Audio_FillHalf). On Cortex-M3 a 32-bit aligned float load /
+ * store is a single LDR/STR — atomic, so no tearing across the boundary.
+ * The volatile qualifier just stops the compiler from caching the values
+ * across the ISR boundary.
+ */
+typedef struct {
+    float phaseAcc;
+    float phaseInc;
+    float freq;
+} Voice;
+
+static volatile Voice voices[NUM_VOICES];
 
 static const uint32_t srPeriods[SAMPLE_RATE_COUNT] = {
     (72000000UL / 22050) - 1,   /* 22050 Hz → 3265 */
@@ -32,6 +47,11 @@ static const char *srNames[SAMPLE_RATE_COUNT] = {
 
 static SampleRateOption _currentSR = SAMPLE_RATE_88200;
 
+static inline float current_sr_hz(void)
+{
+    return (float)(72000000UL / (srPeriods[_currentSR] + 1));
+}
+
 /* ────────────────────────────────────────────────────────────── */
 
 void Audio_Init(DAC_HandleTypeDef *hdac, TIM_HandleTypeDef *htim8)
@@ -40,6 +60,12 @@ void Audio_Init(DAC_HandleTypeDef *hdac, TIM_HandleTypeDef *htim8)
     _htim8 = htim8;
 
     currentWave = sine_table;
+
+    for (uint8_t v = 0; v < NUM_VOICES; v++) {
+        voices[v].phaseAcc = 0.0f;
+        voices[v].phaseInc = 0.0f;
+        voices[v].freq     = 0.0f;
+    }
 
     for (uint32_t i = 0; i < AUDIO_FULL_SIZE; i++)
         audioBuf[i] = 2048;
@@ -65,17 +91,34 @@ void Audio_SetWave(WaveType type)
     }
 }
 
-/* ── Note control ── */
-void Audio_SetNote(float frequency)
+/* ── Per-voice control ── */
+void Audio_NoteOn(uint8_t voice, float frequency)
 {
-    float sr = (float)(72000000UL / (srPeriods[_currentSR] + 1));
-    phaseInc = (frequency * TABLE_SIZE) / sr;
+    if (voice >= NUM_VOICES) return;
+    float inc = (frequency * TABLE_SIZE) / current_sr_hz();
+    voices[voice].freq     = frequency;
+    voices[voice].phaseAcc = 0.0f;     /* reset phase so retrigger is clean */
+    voices[voice].phaseInc = inc;
 }
 
-void Audio_Stop(void)
+void Audio_NoteOff(uint8_t voice)
 {
-    phaseInc = 0.0f;
+    if (voice >= NUM_VOICES) return;
+    voices[voice].phaseInc = 0.0f;
+    voices[voice].freq     = 0.0f;
 }
+
+void Audio_StopAll(void)
+{
+    for (uint8_t v = 0; v < NUM_VOICES; v++) {
+        voices[v].phaseInc = 0.0f;
+        voices[v].freq     = 0.0f;
+    }
+}
+
+/* ── Single-voice convenience (voice 0 = song / melody) ── */
+void Audio_SetNote(float frequency) { Audio_NoteOn(0, frequency); }
+void Audio_Stop(void)               { Audio_NoteOff(0);           }
 
 /* ── Sample rate control ── */
 void Audio_SetSampleRate(SampleRateOption sr)
@@ -84,10 +127,15 @@ void Audio_SetSampleRate(SampleRateOption sr)
     _currentSR = sr;
     __HAL_TIM_SET_AUTORELOAD(_htim8, srPeriods[sr]);
 
-    /* Recalculate phase increment if a note is currently playing */
-    if (phaseInc > 0.0f) {
-        float freq = (phaseInc * (float)(72000000UL / (srPeriods[sr] + 1))) / TABLE_SIZE;
-        Audio_SetNote(freq);
+    /* Recompute every active voice's phase increment for the new SR.
+     * The previous implementation derived the new freq from the OLD
+     * phaseInc using the NEW sample rate, which inverted the math
+     * and produced the wrong pitch on every SR change. */
+    float sr_hz = current_sr_hz();
+    for (uint8_t v = 0; v < NUM_VOICES; v++) {
+        if (voices[v].freq > 0.0f) {
+            voices[v].phaseInc = (voices[v].freq * TABLE_SIZE) / sr_hz;
+        }
     }
 }
 
@@ -105,18 +153,39 @@ void Audio_FillHalf(uint8_t half)
 
     uint16_t *dst = &audioBuf[half * AUDIO_HALF_SIZE];
 
-    if (phaseInc == 0.0f) {
+    /* Snapshot which voices are active for this fill. Voice activations
+     * from the main loop during the fill are picked up on the next half. */
+    uint8_t  active_idx[NUM_VOICES];
+    uint8_t  active_count = 0;
+    for (uint8_t v = 0; v < NUM_VOICES; v++) {
+        if (voices[v].phaseInc > 0.0f) {
+            active_idx[active_count++] = v;
+        }
+    }
+
+    if (active_count == 0) {
         for (uint32_t i = 0; i < AUDIO_HALF_SIZE; i++)
             dst[i] = 2048;
-        phaseAcc = 0.0f;
         return;
     }
 
     for (uint32_t i = 0; i < AUDIO_HALF_SIZE; i++) {
-        uint32_t idx = (uint32_t)phaseAcc & 0xFF;
-        dst[i]   = currentWave[idx];
-        phaseAcc += phaseInc;
-        if (phaseAcc >= TABLE_SIZE) phaseAcc -= TABLE_SIZE;
+        int32_t sum = 0;
+        for (uint8_t a = 0; a < active_count; a++) {
+            uint8_t v = active_idx[a];
+            uint32_t idx = (uint32_t)voices[v].phaseAcc & 0xFFu;
+            sum += (int32_t)currentWave[idx] - 2048;   /* AC-coupled */
+            voices[v].phaseAcc += voices[v].phaseInc;
+            if (voices[v].phaseAcc >= TABLE_SIZE)
+                voices[v].phaseAcc -= TABLE_SIZE;
+        }
+        /* Average across active voices: keeps the mix headroom-bounded
+         * (no clipping for any chord size) at the cost of single-note
+         * loudness scaling down with chord size. */
+        int32_t out = 2048 + (sum / active_count);
+        if (out < 0)        out = 0;
+        else if (out > 4095) out = 4095;
+        dst[i] = (uint16_t)out;
     }
 }
 

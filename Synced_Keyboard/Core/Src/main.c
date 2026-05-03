@@ -80,6 +80,14 @@ static WaveType currentWaveType = WAVE_SQUARE;
 static uint8_t  lastPressedRow = 0xFF;
 static uint8_t  lastPressedCol = 0xFF;
 
+/* Number of chord (note) keys currently held. The song player must stay
+ * muted while ANY chord key is down and resume only when the last one
+ * is released. */
+static uint8_t  activeChordKeys = 0;
+
+/* Press timestamp per playable note key (rows 0..2) for duration_ms. */
+static uint32_t pressTickPerKey[3][NUM_COLS] = {{0}};
+
 /* Song player state for LCD */
 static const char *currentRiffName = "";
 
@@ -97,9 +105,6 @@ static const NoteCode noteCode[3][8] = {
     { {NOTE_E,ACC_NATURAL},{NOTE_F,ACC_NATURAL},{NOTE_F,ACC_SHARP},{NOTE_G,ACC_NATURAL},
       {NOTE_G,ACC_SHARP},{NOTE_A,ACC_NATURAL},{NOTE_A,ACC_SHARP},{NOTE_B,ACC_NATURAL} },
 };
-
-/* Track press timestamp for duration_ms calculation */
-static uint32_t pressTimestamp = 0;
 
 /* USER CODE END PV */
 
@@ -157,6 +162,19 @@ static void LCD_ShowWave(void)
         case WAVE_SQUARE:   LCD_DrawString(70, 150, "SQUARE");   break;
         case WAVE_TRIANGLE: LCD_DrawString(70, 150, "TRIANGLE"); break;
         default:            LCD_DrawString(70, 150, "???");      break;
+    }
+}
+
+/* Retune every currently held chord voice to the new octave offset. */
+static void Chord_RetuneAll(void)
+{
+    for (uint8_t r = 0; r < 3; r++) {
+        for (uint8_t c = 0; c < NUM_COLS; c++) {
+            if (keyState[r][c]) {
+                uint8_t voice = (uint8_t)(1u + r * NUM_COLS + c);
+                Audio_NoteOn(voice, GetNoteFreq(r, c));
+            }
+        }
     }
 }
 
@@ -267,11 +285,18 @@ int main(void)
 	  /* ── Song player tick ── */
 	  SongPlayer_Tick();
 	  SdPlayer_Tick();
-	  /* ── Key PRESS ── */
-	  if (keyEventPending) {
-	      uint8_t r = keyEventRow;
-	      uint8_t c = keyEventCol;
-	      keyEventPending = 0;
+
+	  /* ── Drain ALL queued key events ──
+	   * Each scan-tick can enqueue up to 4 events (one per row); a chord
+	   * crossing the debounce threshold within a single column scan
+	   * produces multiple events back-to-back. The previous single-slot
+	   * design lost every event after the first, which dropped chord
+	   * notes both on the speaker AND on Board 2's display.
+	   */
+	  KeyEvent ev;
+	  while (Keypad_GetEvent(&ev)) {
+	      uint8_t r = ev.row;
+	      uint8_t c = ev.col;
 
 	      /* Always update row/col display */
 	      char rowStr[2] = {'0' + r, '\0'};
@@ -282,141 +307,128 @@ int main(void)
 	      LCD_DrawString(70, 90, "  ");
 	      LCD_DrawString(70, 90, colStr);
 
-	      if (r < 3) {
-	          /* ── Manual note key PRESS — mute song, play note ── */
-	          SongPlayer_MuteForKey();
+	      if (ev.isPress) {
+	          if (r < 3) {
+	              /* ── Note key PRESS ── */
+	              if (activeChordKeys == 0) {
+	                  SongPlayer_MuteForKey();
+	              }
+	              activeChordKeys++;
 
-	          float freq = GetNoteFreq(r, c);
+	              float freq = GetNoteFreq(r, c);
 
-	          int baseOct = (r == 0 || (r == 1 && c < 4)) ? 4 : 5;
-	          int actualOct = baseOct + octaveOffset;
+	              int baseOct   = (r == 0 || (r == 1 && c < 4)) ? 4 : 5;
+	              int actualOct = baseOct + octaveOffset;
 
-	          char noteBuf[5] = {0};
-	          const char *name = keyNoteNames[r][c];
-	          if (name[1] == '#') {
-	              noteBuf[0] = name[0];
-	              noteBuf[1] = '#';
-	              noteBuf[2] = '0' + (char)actualOct;
-	              noteBuf[3] = '\0';
+	              char noteBuf[5] = {0};
+	              const char *name = keyNoteNames[r][c];
+	              if (name[1] == '#') {
+	                  noteBuf[0] = name[0];
+	                  noteBuf[1] = '#';
+	                  noteBuf[2] = '0' + (char)actualOct;
+	                  noteBuf[3] = '\0';
+	              } else {
+	                  noteBuf[0] = name[0];
+	                  noteBuf[1] = '0' + (char)actualOct;
+	                  noteBuf[2] = '\0';
+	              }
+
+	              LCD_DrawString(70, 30, "     ");
+	              LCD_DrawString(70, 30, noteBuf);
+
+	              uint8_t voice = (uint8_t)(1u + r * NUM_COLS + c);
+	              Audio_NoteOn(voice, freq);
+
+	              lastPressedRow = r;
+	              lastPressedCol = c;
+	              pressTickPerKey[r][c] = HAL_GetTick();
+
+	              NoteEvent evt = {
+	                  .start_byte  = NOTE_EVENT_START_BYTE,
+	                  .note_name   = noteCode[r][c].name,
+	                  .accidental  = noteCode[r][c].acc,
+	                  .octave      = (uint8_t)actualOct,
+	                  .velocity    = VEL_KEY_DOWN,
+	                  .duration_ms = 0,
+	                  .track_id    = TRACK_LIVE,
+	                  .active      = 1,
+	              };
+	              UART_TX_SendNoteEvent(&evt);
+
 	          } else {
-	              noteBuf[0] = name[0];
-	              noteBuf[1] = '0' + (char)actualOct;
-	              noteBuf[2] = '\0';
-	          }
-
-	          LCD_DrawString(70, 30, "     ");
-	          LCD_DrawString(70, 30, noteBuf);
-
-	          Audio_SetNote(freq);
-	          lastPressedRow = r;
-	          lastPressedCol = c;
-
-	          /* Record press time for duration calculation on release */
-	          pressTimestamp = HAL_GetTick();
-
-	          /* Build and transmit NoteEvent to Board 2 */
-	          NoteEvent evt = {
-	              .start_byte  = NOTE_EVENT_START_BYTE,
-	              .note_name   = noteCode[r][c].name,
-	              .accidental  = noteCode[r][c].acc,
-	              .octave      = (uint8_t)actualOct,
-	              .velocity    = VEL_KEY_DOWN,
-	              .duration_ms = 0,           /* still held, unknown at press time */
-	              .track_id    = TRACK_LIVE,
-				  .active= 1,
-	          };
-	          UART_TX_SendNoteEvent(&evt);
-
-	      } else {
-	          /* ── Row 3 special keys ── */
-	          switch (c) {
-	          case 1:
-	              if (octaveOffset >= -2 + OCTAVE_STEP) {
-	                  octaveOffset -= OCTAVE_STEP;
-	                  LCD_ShowOctave();
-	                  if (lastPressedRow != 0xFF)
-	                      Audio_SetNote(GetNoteFreq(lastPressedRow, lastPressedCol));
-	              }
-	              break;
-
-	          case 2:
-	              if (octaveOffset <= 3 - OCTAVE_STEP) {
-	                  octaveOffset += OCTAVE_STEP;
-	                  LCD_ShowOctave();
-	                  if (lastPressedRow != 0xFF)
-	                      Audio_SetNote(GetNoteFreq(lastPressedRow, lastPressedCol));
-	              }
-	              break;
-
-
+	              /* ── Row 3 special keys ── */
+	              switch (c) {
+	              case 1:
+	                  if (octaveOffset >= -2 + OCTAVE_STEP) {
+	                      octaveOffset -= OCTAVE_STEP;
+	                      LCD_ShowOctave();
+	                      Chord_RetuneAll();
+	                  }
+	                  break;
+	              case 2:
+	                  if (octaveOffset <= 3 - OCTAVE_STEP) {
+	                      octaveOffset += OCTAVE_STEP;
+	                      LCD_ShowOctave();
+	                      Chord_RetuneAll();
+	                  }
+	                  break;
 	              case 3:
-	                  /* WAVE CYCLE */
 	                  CycleWave();
 	                  break;
-
 	              case 4:
-	                                /* PLAY / PAUSE SD card song */
-	                                SdPlayer_Toggle();
-	                                LCD_ShowSong(SdPlayer_GetFilename());
-	                                break;
-
+	                  SdPlayer_Toggle();
+	                  LCD_ShowSong(SdPlayer_GetFilename());
+	                  break;
 	              case 5:
-	                                /* NEXT SONG */
-	                                SdPlayer_Stop();
-	                                if (SdPlayer_LoadNext()) {
-	                                    SdPlayer_Play();
-	                                }
-	                                LCD_ShowSong(SdPlayer_GetFilename());
-	                                break;
-
+	                  SdPlayer_Stop();
+	                  if (SdPlayer_LoadNext()) {
+	                      SdPlayer_Play();
+	                  }
+	                  LCD_ShowSong(SdPlayer_GetFilename());
+	                  break;
 	              case 6:
-	                  /* CYCLE SAMPLE RATE */
 	                  Audio_SetSampleRate((Audio_GetSampleRate() + 1) % SAMPLE_RATE_COUNT);
 	                  LCD_ShowSampleRate();
 	                  break;
-
 	              default:
 	                  LCD_DrawString(70, 30, "     ");
 	                  LCD_DrawString(70, 30, "---");
 	                  break;
+	              }
 	          }
-	      }
-	  }
+	      } else {
+	          /* ── Key RELEASE ── */
+	          if (r < 3) {
+	              uint8_t voice = (uint8_t)(1u + r * NUM_COLS + c);
+	              Audio_NoteOff(voice);
 
-	  /* ── Key RELEASE — stop note, unmute song if it was playing ── */
-	  if (keyReleaseEventPending) {
-	      keyReleaseEventPending = 0;
+	              uint32_t held_ms = HAL_GetTick() - pressTickPerKey[r][c];
 
-	      if (keyReleaseRow == lastPressedRow && keyReleaseCol == lastPressedCol) {
+	              int baseOct   = (r == 0 || (r == 1 && c < 4)) ? 4 : 5;
+	              int actualOct = baseOct + octaveOffset;
 
-	    	  uint8_t r = keyReleaseRow;
-	    	      uint8_t c = keyReleaseCol;
+	              NoteEvent evt = {
+	                  .start_byte  = NOTE_EVENT_START_BYTE,
+	                  .note_name   = noteCode[r][c].name,
+	                  .accidental  = noteCode[r][c].acc,
+	                  .octave      = (uint8_t)actualOct,
+	                  .velocity    = VEL_KEY_UP,
+	                  .duration_ms = (held_ms > 0xFFFFu) ? 0xFFFFu : (uint16_t)held_ms,
+	                  .track_id    = TRACK_LIVE,
+	                  .active      = 0,
+	              };
+	              UART_TX_SendNoteEvent(&evt);
 
-	    	      uint32_t held_ms = HAL_GetTick() - pressTimestamp;
-
-	    	      int baseOct   = (r == 0 || (r == 1 && c < 4)) ? 4 : 5;
-	    	      int actualOct = baseOct + octaveOffset;
-
-	    	      NoteEvent evt = {
-	    	          .start_byte  = NOTE_EVENT_START_BYTE,
-	    	          .note_name   = noteCode[r][c].name,
-	    	          .accidental  = noteCode[r][c].acc,
-	    	          .octave      = (uint8_t)actualOct,
-	    	          .velocity    = VEL_KEY_UP,
-	    	          .duration_ms = (held_ms > 0xFFFF) ? 0xFFFF : (uint16_t)held_ms,
-	    	          .track_id    = TRACK_LIVE,
-					  .active= 0,
-	    	      };
-	    	      UART_TX_SendNoteEvent(&evt);
-
-	          Audio_Stop();
-	          LCD_DrawString(70, 30, "     ");
-	          lastPressedRow = 0xFF;
-	          lastPressedCol = 0xFF;
-	          /* Restore song playback after manual key released */
-	          SongPlayer_UnmuteAfterKey();
-	          /* Update LCD song status */
-	          LCD_ShowSong(currentRiffName);
+	              if (activeChordKeys > 0) activeChordKeys--;
+	              if (activeChordKeys == 0) {
+	                  LCD_DrawString(70, 30, "     ");
+	                  lastPressedRow = 0xFF;
+	                  lastPressedCol = 0xFF;
+	                  SongPlayer_UnmuteAfterKey();
+	                  LCD_ShowSong(currentRiffName);
+	              }
+	          }
+	          /* Row 3 release: nothing to do (special keys are press-only). */
 	      }
 	  }
 
