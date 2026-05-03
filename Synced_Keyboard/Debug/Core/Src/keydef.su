@@ -1,0 +1,2 @@
+../Core/Src/keydef.c:38:6:Keypad_AllColumnsOff	16	static
+../Core/Src/keydef.c:45:6:Keypad_ScanOneColumn	16	static

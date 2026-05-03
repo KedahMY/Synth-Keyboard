@@ -1,0 +1,8 @@
+../Core/Src/song_player.c:10:6:SongPlayer_Start	16	static
+../Core/Src/song_player.c:23:6:SongPlayer_Toggle	16	static
+../Core/Src/song_player.c:46:6:SongPlayer_Stop	8	static
+../Core/Src/song_player.c:55:6:SongPlayer_MuteForKey	8	static
+../Core/Src/song_player.c:63:6:SongPlayer_UnmuteAfterKey	8	static
+../Core/Src/song_player.c:72:9:SongPlayer_IsPlaying	4	static
+../Core/Src/song_player.c:73:9:SongPlayer_IsPaused	4	static
+../Core/Src/song_player.c:75:6:SongPlayer_Tick	16	static

@@ -1,0 +1,2 @@
+../Core/Src/uart_tx.c:5:6:UART_TX_Init	32	static
+../Core/Src/uart_tx.c:33:6:UART_TX_SendNoteEvent	16	static

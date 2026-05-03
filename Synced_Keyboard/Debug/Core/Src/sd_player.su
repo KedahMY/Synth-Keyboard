@@ -1,0 +1,10 @@
+../Core/Src/sd_player.c:24:6:SdPlayer_Init	8	static
+../Core/Src/sd_player.c:32:13:CloseFile	8	static
+../Core/Src/sd_player.c:37:9:SdPlayer_LoadNext	96	static
+../Core/Src/sd_player.c:64:6:SdPlayer_Play	8	static
+../Core/Src/sd_player.c:70:6:SdPlayer_Stop	8	static
+../Core/Src/sd_player.c:78:6:SdPlayer_Toggle	8	static
+../Core/Src/sd_player.c:86:6:SdPlayer_RequestFill	16	static
+../Core/Src/sd_player.c:93:6:SdPlayer_Tick	40	static
+../Core/Src/sd_player.c:131:15:SdPlayer_GetState	4	static
+../Core/Src/sd_player.c:132:15:SdPlayer_GetFilename	4	static

@@ -1,0 +1,10 @@
+../Core/Src/audio.c:37:6:Audio_Init	32	static
+../Core/Src/audio.c:59:6:Audio_SetWave	16	static
+../Core/Src/audio.c:69:6:Audio_SetNote	24	static
+../Core/Src/audio.c:75:6:Audio_Stop	4	static
+../Core/Src/audio.c:81:6:Audio_SetSampleRate	24	static
+../Core/Src/audio.c:94:18:Audio_GetSampleRate	4	static
+../Core/Src/audio.c:95:18:Audio_GetSampleRateName	4	static
+../Core/Src/audio.c:98:6:Audio_FillHalf	32	static
+../Core/Src/audio.c:124:6:HAL_DAC_ConvHalfCpltCallbackCh1	16	static
+../Core/Src/audio.c:129:6:HAL_DAC_ConvCpltCallbackCh1	16	static
