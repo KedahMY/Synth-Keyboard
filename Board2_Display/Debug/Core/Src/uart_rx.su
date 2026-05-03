@@ -1,0 +1,4 @@
+../Core/Src/uart_rx.c:35:6:uart_rx_init	40	static
+../Core/Src/uart_rx.c:95:6:HAL_UARTEx_RxEventCallback	24	static
+../Core/Src/uart_rx.c:119:6:DMA1_Channel5_IRQHandler	8	static
+../Core/Src/uart_rx.c:123:6:USART1_IRQHandler	8	static

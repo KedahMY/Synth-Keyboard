@@ -1,0 +1,9 @@
+../Core/Src/hub75.c:89:6:hub75_remap_jtag	4	static
+../Core/Src/hub75.c:97:6:hub75_gpio_init	32	static
+../Core/Src/hub75.c:131:6:hub75_tim2_init	16	static
+../Core/Src/hub75.c:163:6:hub75_brightness_init	64	static
+../Core/Src/hub75.c:192:6:hub75_set_brightness	24	static
+../Core/Src/hub75.c:202:6:hub75_swap_buffers	16	static,ignoring_inline_asm
+../Core/Src/hub75.c:210:6:hub75_clear_back	8	static
+../Core/Src/hub75.c:218:6:hub75_row_isr	40	static,ignoring_inline_asm
+../Core/Src/hub75.c:324:6:TIM2_IRQHandler	8	static

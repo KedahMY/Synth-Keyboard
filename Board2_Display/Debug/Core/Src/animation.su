@@ -1,0 +1,9 @@
+../Core/Src/animation.c:141:13:resolve_note_visual	32	static
+../Core/Src/animation.c:206:9:animation_queue_event	24	static
+../Core/Src/animation.c:214:16:queue_pop	16	static
+../Core/Src/animation.c:225:13:spawn_note	24	static
+../Core/Src/animation.c:244:13:stop_growing	24	static
+../Core/Src/animation.c:260:13:draw_keyboard_row	24	static
+../Core/Src/animation.c:276:13:process_events	24	static
+../Core/Src/animation.c:291:6:animation_init	8	static
+../Core/Src/animation.c:297:6:animation_tick	32	static

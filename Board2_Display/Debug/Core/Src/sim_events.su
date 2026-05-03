@@ -1,0 +1,2 @@
+../Core/Src/sim_events.c:137:6:sim_init	4	static
+../Core/Src/sim_events.c:138:6:sim_tick	4	static
