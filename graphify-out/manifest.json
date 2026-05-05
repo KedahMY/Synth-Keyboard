@@ -1,0 +1,778 @@
+{
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Core\\Inc\\animation.h": {
+    "mtime": 1777800056.3623848,
+    "hash": "964ac916939548a3b691b009d7e2c68a"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Core\\Inc\\gpio.h": {
+    "mtime": 1774766832.751,
+    "hash": "8f8f0410e0509c4b0ca7724d68ae503b"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Core\\Inc\\hub75.h": {
+    "mtime": 1777539205.87958,
+    "hash": "69c6f1c2a65462d8eef2bda644b1443e"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Core\\Inc\\hub75_color.h": {
+    "mtime": 1776767085.8674288,
+    "hash": "bf9987dc9229d112775521d991c2b547"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Core\\Inc\\main.h": {
+    "mtime": 1774765959.479,
+    "hash": "876f7f9e2562fe1e328e5c2650f27cde"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Core\\Inc\\note_event.h": {
+    "mtime": 1777546181.329051,
+    "hash": "df3bfb0268b55f7a1088c75ef98121a4"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Core\\Inc\\sim_events.h": {
+    "mtime": 1776768241.5754786,
+    "hash": "e1cef08967345243a57d8d5b2e53bb05"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Core\\Inc\\stm32f1xx_hal_conf.h": {
+    "mtime": 1777538315.3437834,
+    "hash": "5288aa333b367575550993d3799dc631"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Core\\Inc\\stm32f1xx_it.h": {
+    "mtime": 1774765958.894,
+    "hash": "de6eb3ec65c935723f3118ad445631a2"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Core\\Inc\\uart_rx.h": {
+    "mtime": 1777801313.837138,
+    "hash": "86f8121d8055a610e1f56cbb2d5341ba"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Core\\Src\\animation.c": {
+    "mtime": 1777802008.4323783,
+    "hash": "cc915ee99fc0ad953768262c8238bd1d"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Core\\Src\\gpio.c": {
+    "mtime": 1774772051.254,
+    "hash": "6ef94c1b998be692d765357cb34168a5"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Core\\Src\\hub75.c": {
+    "mtime": 1776767987.7471862,
+    "hash": "af12799593d45a01028b943d1bcd07b6"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Core\\Src\\main.c": {
+    "mtime": 1777801360.0571206,
+    "hash": "c810ad2feb6f3300c2ab13eb0bf0574c"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Core\\Src\\sim_events.c": {
+    "mtime": 1777792998.88185,
+    "hash": "fb4f51c37ef41f43eefd37684099e182"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Core\\Src\\stm32f1xx_hal_msp.c": {
+    "mtime": 1774766833.126,
+    "hash": "d1ad5bf52404e0cf80da2832fabbb13f"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Core\\Src\\stm32f1xx_it.c": {
+    "mtime": 1774765958.78,
+    "hash": "6d8f73c2c516e6555acdec28a88c2eb4"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Core\\Src\\syscalls.c": {
+    "mtime": 1774765964.4802003,
+    "hash": "4b25d3fa90813759a8ddce3246671d0c"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Core\\Src\\sysmem.c": {
+    "mtime": 1774765964.4466858,
+    "hash": "156e153de0d481061b84f25ac2012efa"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Core\\Src\\system_stm32f1xx.c": {
+    "mtime": 1771662115.4572017,
+    "hash": "a8d6c5396fa730f3cb2f9654ad0b13f8"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Core\\Src\\uart_rx.c": {
+    "mtime": 1777801451.3754969,
+    "hash": "627abd9be7c20e94e3aa155003ced8a9"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\CMSIS\\Device\\ST\\STM32F1xx\\Include\\stm32f103xe.h": {
+    "mtime": 1771662115.4202025,
+    "hash": "a331196e327b198b949a3b14723b0a4f"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\CMSIS\\Device\\ST\\STM32F1xx\\Include\\stm32f1xx.h": {
+    "mtime": 1771662115.4122045,
+    "hash": "af275d135f27681f155e7f0cb2d05b34"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\CMSIS\\Device\\ST\\STM32F1xx\\Include\\system_stm32f1xx.h": {
+    "mtime": 1771662115.409205,
+    "hash": "0e4f774c963ec42d267635c804f56977"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\CMSIS\\Include\\cmsis_armcc.h": {
+    "mtime": 1771662103.3640256,
+    "hash": "d9ecdbb103e0b598d58fea36182656db"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\CMSIS\\Include\\cmsis_armclang.h": {
+    "mtime": 1771662103.3650253,
+    "hash": "1339267ef03634b336354ac803991ca6"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\CMSIS\\Include\\cmsis_compiler.h": {
+    "mtime": 1771662103.3660264,
+    "hash": "c6d4aace8bc8ed71fe080e6b955c67c6"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\CMSIS\\Include\\cmsis_gcc.h": {
+    "mtime": 1771662103.3675325,
+    "hash": "ba7e4770884341336138fcec9d34fc09"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\CMSIS\\Include\\cmsis_iccarm.h": {
+    "mtime": 1771662103.3685415,
+    "hash": "192071118aa92f3707d0d440f5f4ee75"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\CMSIS\\Include\\cmsis_version.h": {
+    "mtime": 1771662103.3685415,
+    "hash": "cacb641688416f3619b516b9bc59fdc3"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\CMSIS\\Include\\core_armv8mbl.h": {
+    "mtime": 1771662103.370548,
+    "hash": "676b97059875d75fa4c51c523aef153c"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\CMSIS\\Include\\core_armv8mml.h": {
+    "mtime": 1771662103.3715482,
+    "hash": "108c80101b01af6859aa31cde48b73e4"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\CMSIS\\Include\\core_cm0.h": {
+    "mtime": 1771662103.3725486,
+    "hash": "0f3087a652b6362a6085e3551f4745e8"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\CMSIS\\Include\\core_cm0plus.h": {
+    "mtime": 1771662103.3735487,
+    "hash": "a3bebd2418aa7a3f2aef50f0914624dc"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\CMSIS\\Include\\core_cm1.h": {
+    "mtime": 1771662103.3745482,
+    "hash": "d5946786246ce8aadd9471f13bc2b834"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\CMSIS\\Include\\core_cm23.h": {
+    "mtime": 1771662103.3755484,
+    "hash": "5b3a1deb503bcc0e52f6e205c8ed76c3"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\CMSIS\\Include\\core_cm3.h": {
+    "mtime": 1771662103.3755484,
+    "hash": "d2e6241b9ae8050e2b1d52fcf2965f17"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\CMSIS\\Include\\core_cm33.h": {
+    "mtime": 1771662103.3780663,
+    "hash": "8feaa4c44744994a5395d1e487698056"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\CMSIS\\Include\\core_cm4.h": {
+    "mtime": 1771662103.3790698,
+    "hash": "d92c9841b9de8fd67d852e8a65a138f8"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\CMSIS\\Include\\core_cm7.h": {
+    "mtime": 1771662103.3810728,
+    "hash": "b8114115ceffdd2bf2b07a2a05909cc2"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\CMSIS\\Include\\core_sc000.h": {
+    "mtime": 1771662103.3810728,
+    "hash": "b2e136ae2c650adca2ea38a92f8abdf4"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\CMSIS\\Include\\core_sc300.h": {
+    "mtime": 1771662103.383073,
+    "hash": "e910f4c2f39da6218a5eccb67908858d"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\CMSIS\\Include\\mpu_armv7.h": {
+    "mtime": 1771662103.383073,
+    "hash": "e3bb1b1024c4b933b565cdee12bccfaa"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\CMSIS\\Include\\mpu_armv8.h": {
+    "mtime": 1771662103.3840742,
+    "hash": "329b3f33cb92fa9e408d98c6b905b1ae"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\CMSIS\\Include\\tz_context.h": {
+    "mtime": 1771662103.3850732,
+    "hash": "1c5f40a94063779b674e03bf6fb00259"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\stm32f1xx_hal.h": {
+    "mtime": 1771662115.175022,
+    "hash": "64516e1be230fffbb9212010a06dd674"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\stm32f1xx_hal_cortex.h": {
+    "mtime": 1771662115.1630206,
+    "hash": "7f8636a65acfe666284fd0046063f2f8"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\stm32f1xx_hal_def.h": {
+    "mtime": 1771662115.159021,
+    "hash": "fc6d61f43474c9b3e48748df39d58bc4"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\stm32f1xx_hal_dma.h": {
+    "mtime": 1771662115.154022,
+    "hash": "abaef8ad7e97660326e3e8bcd331444a"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\stm32f1xx_hal_dma_ex.h": {
+    "mtime": 1771662115.1700213,
+    "hash": "9583fb122affcc006347cb7c7f22d1a2"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\stm32f1xx_hal_exti.h": {
+    "mtime": 1771662115.1560216,
+    "hash": "9fb96f76b70334f14dcbc1d8550214b6"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\stm32f1xx_hal_flash.h": {
+    "mtime": 1771662115.1820292,
+    "hash": "e0fcae13f26a552a915c4f1d78e9ea1e"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\stm32f1xx_hal_flash_ex.h": {
+    "mtime": 1771662115.1610236,
+    "hash": "657b9a56e7342dcccaff4f73b7ae2793"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\stm32f1xx_hal_gpio.h": {
+    "mtime": 1771662115.1570272,
+    "hash": "c9f7d1d58a66a8107809d8cc0db7e885"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\stm32f1xx_hal_gpio_ex.h": {
+    "mtime": 1771662115.183028,
+    "hash": "c9f649f4dfedbdb597560a7b1f5ce3a8"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\stm32f1xx_hal_pwr.h": {
+    "mtime": 1771662115.155021,
+    "hash": "f01041525ab28fb1841c9fba89800d95"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\stm32f1xx_hal_rcc.h": {
+    "mtime": 1771662115.1780305,
+    "hash": "9f56e3984df01736cf3da0501f8d26c4"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\stm32f1xx_hal_rcc_ex.h": {
+    "mtime": 1771662115.1530225,
+    "hash": "a8609a8c0801ab54d717cc48ca23d1fe"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\stm32f1xx_hal_tim.h": {
+    "mtime": 1771662115.1390307,
+    "hash": "e352b1aea42d1a561dacca789fb3d1ca"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\stm32f1xx_hal_tim_ex.h": {
+    "mtime": 1771662115.1740215,
+    "hash": "d42b0f312d18977a4b9144aa1270f21b"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\stm32f1xx_hal_uart.h": {
+    "mtime": 1777539055.4452412,
+    "hash": "040977210a0ac2f1b578d0aeef6d1e10"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\Legacy\\stm32_hal_legacy.h": {
+    "mtime": 1771662115.1860354,
+    "hash": "2d839a01575b720e644790ac0713495e"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\STM32F1xx_HAL_Driver\\Src\\stm32f1xx_hal.c": {
+    "mtime": 1771662115.3229074,
+    "hash": "9ba26b28f11aef86fd2ebadf3c67a826"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\STM32F1xx_HAL_Driver\\Src\\stm32f1xx_hal_cortex.c": {
+    "mtime": 1771662115.283759,
+    "hash": "bf50f343e7210d623a9ef2935b59d35a"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\STM32F1xx_HAL_Driver\\Src\\stm32f1xx_hal_dma.c": {
+    "mtime": 1771662115.304908,
+    "hash": "7289b90cd92a77a3647f3467cfa8d965"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\STM32F1xx_HAL_Driver\\Src\\stm32f1xx_hal_exti.c": {
+    "mtime": 1771662115.337905,
+    "hash": "f5fc429255f70edf4e225324c27bf457"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\STM32F1xx_HAL_Driver\\Src\\stm32f1xx_hal_flash.c": {
+    "mtime": 1771662115.3169057,
+    "hash": "6bb268195ffc689e49d00f996583331b"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\STM32F1xx_HAL_Driver\\Src\\stm32f1xx_hal_flash_ex.c": {
+    "mtime": 1771662115.2963908,
+    "hash": "130a62f49df3f61baea4ccefce2bcbf3"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\STM32F1xx_HAL_Driver\\Src\\stm32f1xx_hal_gpio.c": {
+    "mtime": 1771662115.332907,
+    "hash": "457f996a01871ca3a5a151e52748dec4"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\STM32F1xx_HAL_Driver\\Src\\stm32f1xx_hal_gpio_ex.c": {
+    "mtime": 1771662115.294756,
+    "hash": "98ae26bacefcfcce9f6edfea30efe027"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\STM32F1xx_HAL_Driver\\Src\\stm32f1xx_hal_pwr.c": {
+    "mtime": 1771662115.3079064,
+    "hash": "4c42fdec04571d3fb6be040cc0c117d0"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\STM32F1xx_HAL_Driver\\Src\\stm32f1xx_hal_rcc.c": {
+    "mtime": 1771662115.2978985,
+    "hash": "f3d284e3a1de240c45594b61d99f1442"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\STM32F1xx_HAL_Driver\\Src\\stm32f1xx_hal_rcc_ex.c": {
+    "mtime": 1771662115.294756,
+    "hash": "583f162bfe3901c4663491e040740e80"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\STM32F1xx_HAL_Driver\\Src\\stm32f1xx_hal_tim.c": {
+    "mtime": 1771662115.3279052,
+    "hash": "36e2b22ad1f9f3f9eb6e227893936651"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\STM32F1xx_HAL_Driver\\Src\\stm32f1xx_hal_tim_ex.c": {
+    "mtime": 1771662115.3169057,
+    "hash": "121b627de8dc89231ffe773a04926eec"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\STM32F1xx_HAL_Driver\\Src\\stm32f1xx_hal_uart.c": {
+    "mtime": 1777538952.448721,
+    "hash": "d83db4414f49a44bd8b5cf4dc54f4bef"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Core\\Inc\\ascii.h": {
+    "mtime": 1777791576.9604588,
+    "hash": "5a1b7dd7bcb09f8b50cf4f9a5422416a"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Core\\Inc\\audio.h": {
+    "mtime": 1777792767.8124154,
+    "hash": "f0a50691ab17cd6acf16b5613d6e08f2"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Core\\Inc\\keydef.h": {
+    "mtime": 1777792734.8771875,
+    "hash": "9035cfde7d9bf2354c595761e762b96e"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Core\\Inc\\lcd.h": {
+    "mtime": 1777791576.962436,
+    "hash": "87bd14417ee260ed403cf1738233a61c"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Core\\Inc\\main.h": {
+    "mtime": 1777791576.963445,
+    "hash": "53ff659dcc352130d61713715f06b968"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Core\\Inc\\note_event.h": {
+    "mtime": 1777791576.963445,
+    "hash": "df3bfb0268b55f7a1088c75ef98121a4"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Core\\Inc\\sd_player.h": {
+    "mtime": 1777791576.964445,
+    "hash": "edd76623d95c48b3d9ceea065ad0fd8f"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Core\\Inc\\song.h": {
+    "mtime": 1777791576.964445,
+    "hash": "fc05a1ff56e40bae8d1b8341eba3037d"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Core\\Inc\\song_player.h": {
+    "mtime": 1777791576.964445,
+    "hash": "d5064f0e296776dfdafd3c6c8cedbf55"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Core\\Inc\\stm32f1xx_hal_conf.h": {
+    "mtime": 1777791576.9665718,
+    "hash": "e244cb9d002aa5360e35bfebecdd8f67"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Core\\Inc\\stm32f1xx_it.h": {
+    "mtime": 1777791576.9665718,
+    "hash": "33de20179be803805a6433d9d18d980d"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Core\\Inc\\uart_tx.h": {
+    "mtime": 1777791576.9665718,
+    "hash": "19ca178267610880013b4b4b80d046fb"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Core\\Inc\\wavetable.h": {
+    "mtime": 1777791576.9665718,
+    "hash": "876a95a8d6ebadbd26de3f5305fab7d0"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Core\\Src\\audio.c": {
+    "mtime": 1777792803.5233462,
+    "hash": "8d670eddece0c2506cd56aa6c8fcc499"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Core\\Src\\keydef.c": {
+    "mtime": 1777792753.239032,
+    "hash": "58fee2e6eaab278f70511dd841abec5f"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Core\\Src\\lcd.c": {
+    "mtime": 1777791576.970782,
+    "hash": "994a908ff95abb1c5dbc3bf61447ef4b"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Core\\Src\\main.c": {
+    "mtime": 1777797919.4123545,
+    "hash": "14770de27754ce8b3cef4c9743ebec76"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Core\\Src\\sd_player.c": {
+    "mtime": 1777791576.9722257,
+    "hash": "ab596883cf1d5775f563039bc8496ba6"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Core\\Src\\song_player.c": {
+    "mtime": 1777791576.9726188,
+    "hash": "7a6e1296809efd4dcc00d2598062f2ee"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Core\\Src\\stm32f1xx_hal_msp.c": {
+    "mtime": 1777791576.9726188,
+    "hash": "f7c09966c99d381d004fedbcd032a099"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Core\\Src\\stm32f1xx_it.c": {
+    "mtime": 1777791576.9726188,
+    "hash": "078fff5607c542de27b231f98bc0ea9d"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Core\\Src\\syscalls.c": {
+    "mtime": 1777791576.9726188,
+    "hash": "d48e94c3f079219b5f0085c65e815a20"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Core\\Src\\sysmem.c": {
+    "mtime": 1777791576.9726188,
+    "hash": "878a3d163a238e0cab957cbed7c7d12d"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Core\\Src\\system_stm32f1xx.c": {
+    "mtime": 1777791576.9726188,
+    "hash": "6d52069a5c4959a8b90fbc0bde27413f"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Core\\Src\\uart_tx.c": {
+    "mtime": 1777791576.9726188,
+    "hash": "9993673a5c896e0b108b2253d110d541"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Core\\Src\\wavetable.c": {
+    "mtime": 1777791576.9726188,
+    "hash": "5a1b5cae53692a868914efc70770639d"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\CMSIS\\Device\\ST\\STM32F1xx\\Include\\stm32f103xe.h": {
+    "mtime": 1777791577.260007,
+    "hash": "c040d29dfb3f55b4fc5bddb788da925c"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\CMSIS\\Device\\ST\\STM32F1xx\\Include\\stm32f1xx.h": {
+    "mtime": 1777791577.2605388,
+    "hash": "91c163a3214e145b1abcc6fa5b30a49c"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\CMSIS\\Device\\ST\\STM32F1xx\\Include\\system_stm32f1xx.h": {
+    "mtime": 1777791577.2610795,
+    "hash": "633556d70710cec34f0d6d30130d537f"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\CMSIS\\Include\\cmsis_armcc.h": {
+    "mtime": 1777791577.2630293,
+    "hash": "d9ecdbb103e0b598d58fea36182656db"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\CMSIS\\Include\\cmsis_armclang.h": {
+    "mtime": 1777791577.263949,
+    "hash": "1339267ef03634b336354ac803991ca6"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\CMSIS\\Include\\cmsis_compiler.h": {
+    "mtime": 1777791577.2644775,
+    "hash": "c6d4aace8bc8ed71fe080e6b955c67c6"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\CMSIS\\Include\\cmsis_gcc.h": {
+    "mtime": 1777791577.2655492,
+    "hash": "ba7e4770884341336138fcec9d34fc09"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\CMSIS\\Include\\cmsis_iccarm.h": {
+    "mtime": 1777791577.266616,
+    "hash": "192071118aa92f3707d0d440f5f4ee75"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\CMSIS\\Include\\cmsis_version.h": {
+    "mtime": 1777791577.2671466,
+    "hash": "cacb641688416f3619b516b9bc59fdc3"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\CMSIS\\Include\\core_armv8mbl.h": {
+    "mtime": 1777791577.267678,
+    "hash": "676b97059875d75fa4c51c523aef153c"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\CMSIS\\Include\\core_armv8mml.h": {
+    "mtime": 1777791577.2694578,
+    "hash": "108c80101b01af6859aa31cde48b73e4"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\CMSIS\\Include\\core_cm0.h": {
+    "mtime": 1777791577.2704637,
+    "hash": "0f3087a652b6362a6085e3551f4745e8"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\CMSIS\\Include\\core_cm0plus.h": {
+    "mtime": 1777791577.2704637,
+    "hash": "a3bebd2418aa7a3f2aef50f0914624dc"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\CMSIS\\Include\\core_cm1.h": {
+    "mtime": 1777791577.2704637,
+    "hash": "d5946786246ce8aadd9471f13bc2b834"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\CMSIS\\Include\\core_cm23.h": {
+    "mtime": 1777791577.2730794,
+    "hash": "5b3a1deb503bcc0e52f6e205c8ed76c3"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\CMSIS\\Include\\core_cm3.h": {
+    "mtime": 1777791577.2730794,
+    "hash": "d2e6241b9ae8050e2b1d52fcf2965f17"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\CMSIS\\Include\\core_cm33.h": {
+    "mtime": 1777791577.2755725,
+    "hash": "8feaa4c44744994a5395d1e487698056"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\CMSIS\\Include\\core_cm4.h": {
+    "mtime": 1777791577.2755725,
+    "hash": "d92c9841b9de8fd67d852e8a65a138f8"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\CMSIS\\Include\\core_cm7.h": {
+    "mtime": 1777791577.2755725,
+    "hash": "b8114115ceffdd2bf2b07a2a05909cc2"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\CMSIS\\Include\\core_sc000.h": {
+    "mtime": 1777791577.2785337,
+    "hash": "b2e136ae2c650adca2ea38a92f8abdf4"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\CMSIS\\Include\\core_sc300.h": {
+    "mtime": 1777791577.2785337,
+    "hash": "e910f4c2f39da6218a5eccb67908858d"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\CMSIS\\Include\\mpu_armv7.h": {
+    "mtime": 1777791577.2785337,
+    "hash": "e3bb1b1024c4b933b565cdee12bccfaa"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\CMSIS\\Include\\mpu_armv8.h": {
+    "mtime": 1777791577.2785337,
+    "hash": "329b3f33cb92fa9e408d98c6b905b1ae"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\CMSIS\\Include\\tz_context.h": {
+    "mtime": 1777791577.2816243,
+    "hash": "1c5f40a94063779b674e03bf6fb00259"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\stm32f1xx_hal.h": {
+    "mtime": 1777791577.2816243,
+    "hash": "403bc274be3ad92f30fefa94dc930be8"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\stm32f1xx_hal_cortex.h": {
+    "mtime": 1777791577.2816243,
+    "hash": "2e8298d363e5a06c3489ba76a8f43b07"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\stm32f1xx_hal_dac.h": {
+    "mtime": 1777791577.2876558,
+    "hash": "c562c4e59987140a8d30aead148bfac3"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\stm32f1xx_hal_dac_ex.h": {
+    "mtime": 1777791577.2876558,
+    "hash": "11be7851e94f007b39bb523b1eabfc11"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\stm32f1xx_hal_def.h": {
+    "mtime": 1777791577.2886634,
+    "hash": "bd37b9630ccdb34e7a1d09a4de8b6724"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\stm32f1xx_hal_dma.h": {
+    "mtime": 1777791577.2886634,
+    "hash": "82e36d9b31e4efeb80fac43048878bdb"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\stm32f1xx_hal_dma_ex.h": {
+    "mtime": 1777791577.2886634,
+    "hash": "339ef2b07f8ca333ff305fa12ed17cf4"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\stm32f1xx_hal_exti.h": {
+    "mtime": 1777791577.2886634,
+    "hash": "e492007709722ba4827719fe0fe9fc6d"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\stm32f1xx_hal_flash.h": {
+    "mtime": 1777791577.2886634,
+    "hash": "7721c95b2af98e7d92eaffa3cd735f54"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\stm32f1xx_hal_flash_ex.h": {
+    "mtime": 1777791577.2886634,
+    "hash": "48dbc7b9e2c9dbedc65f0c7364c513fc"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\stm32f1xx_hal_gpio.h": {
+    "mtime": 1777791577.2886634,
+    "hash": "c9f7d1d58a66a8107809d8cc0db7e885"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\stm32f1xx_hal_gpio_ex.h": {
+    "mtime": 1777791577.2937415,
+    "hash": "c9f649f4dfedbdb597560a7b1f5ce3a8"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\stm32f1xx_hal_pwr.h": {
+    "mtime": 1777791577.2937415,
+    "hash": "8126fac881434d656f461c56937cb740"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\stm32f1xx_hal_rcc.h": {
+    "mtime": 1777791577.2937415,
+    "hash": "e504c5278c615443739295b21de7e589"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\stm32f1xx_hal_rcc_ex.h": {
+    "mtime": 1777791577.2937415,
+    "hash": "2b7233eeb04679f03bc587cb00735452"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\stm32f1xx_hal_sd.h": {
+    "mtime": 1777791577.2937415,
+    "hash": "b522bab4fccf48f5a5d2851d53413738"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\stm32f1xx_hal_sram.h": {
+    "mtime": 1777791577.2937415,
+    "hash": "c6c742e9132d252136b68b75c37d3716"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\stm32f1xx_hal_tim.h": {
+    "mtime": 1777791577.2987463,
+    "hash": "98496684d3f8056abc089bdde2b8c9df"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\stm32f1xx_hal_tim_ex.h": {
+    "mtime": 1777791577.2997632,
+    "hash": "a550b19cbbc4cadbb0ee9b84b5495b05"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\stm32f1xx_hal_uart.h": {
+    "mtime": 1777791577.2997632,
+    "hash": "68842ed10818ee7a5b55ad005b864ef0"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\stm32f1xx_ll_fsmc.h": {
+    "mtime": 1777791577.2997632,
+    "hash": "b5c75304eedc372f7051fe987daacfbc"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\stm32f1xx_ll_sdmmc.h": {
+    "mtime": 1777791577.2997632,
+    "hash": "f035e2c26bdf2c2e80dd8f51914ccaa9"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\Legacy\\stm32_hal_legacy.h": {
+    "mtime": 1777791577.2816243,
+    "hash": "e1caff29745f98613ddba737978f0985"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Src\\stm32f1xx_hal.c": {
+    "mtime": 1777791577.2997632,
+    "hash": "7e1f6155c522987f2f1d11bf6feabfc9"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Src\\stm32f1xx_hal_cortex.c": {
+    "mtime": 1777791577.2997632,
+    "hash": "63d3784d78cf33ba9a910e5b529b9930"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Src\\stm32f1xx_hal_dac.c": {
+    "mtime": 1777791577.2997632,
+    "hash": "cc1210c3f3bc26c9ceaec1ea0296daa5"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Src\\stm32f1xx_hal_dac_ex.c": {
+    "mtime": 1777791577.3065357,
+    "hash": "0b1d010726764984cf5157c4dec71e23"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Src\\stm32f1xx_hal_dma.c": {
+    "mtime": 1777791577.3065357,
+    "hash": "58413ccf279526a5a998061b0904906b"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Src\\stm32f1xx_hal_exti.c": {
+    "mtime": 1777791577.3065357,
+    "hash": "13609db5e96a4ab346cefe6a4a9a53f8"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Src\\stm32f1xx_hal_flash.c": {
+    "mtime": 1777791577.3090954,
+    "hash": "06753d31821328d80e808027634acc53"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Src\\stm32f1xx_hal_flash_ex.c": {
+    "mtime": 1777791577.3090954,
+    "hash": "117b92a37de3098fa1b5da7a312903c5"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Src\\stm32f1xx_hal_gpio.c": {
+    "mtime": 1777791577.3090954,
+    "hash": "457f996a01871ca3a5a151e52748dec4"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Src\\stm32f1xx_hal_gpio_ex.c": {
+    "mtime": 1777791577.3090954,
+    "hash": "98ae26bacefcfcce9f6edfea30efe027"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Src\\stm32f1xx_hal_pwr.c": {
+    "mtime": 1777791577.3118894,
+    "hash": "6cfa86b9ecaa656f8694a5e57397cf78"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Src\\stm32f1xx_hal_rcc.c": {
+    "mtime": 1777791577.3118894,
+    "hash": "a3cfd48544a934ed75d797654ce9fbda"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Src\\stm32f1xx_hal_rcc_ex.c": {
+    "mtime": 1777791577.3118894,
+    "hash": "6910396568284ab71ecf63013beebf78"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Src\\stm32f1xx_hal_sd.c": {
+    "mtime": 1777791577.3146937,
+    "hash": "b2bc43a49f3b7a454c875bd0d667da09"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Src\\stm32f1xx_hal_sram.c": {
+    "mtime": 1777791577.3146937,
+    "hash": "0964f3c91fac01248a334e00bfebf7af"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Src\\stm32f1xx_hal_tim.c": {
+    "mtime": 1777791577.3146937,
+    "hash": "90a8e583117d21cc7a62270031734aa7"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Src\\stm32f1xx_hal_tim_ex.c": {
+    "mtime": 1777791577.3180175,
+    "hash": "00153d5ad8c4bb78d28af7ed6f204f3f"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Src\\stm32f1xx_hal_uart.c": {
+    "mtime": 1777791577.319526,
+    "hash": "e858f99ec5456e59da5ea7be94a6a3d6"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Src\\stm32f1xx_ll_fsmc.c": {
+    "mtime": 1777791577.319526,
+    "hash": "2311939b46fe3d5abdffcd9ec70d72b9"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\Src\\stm32f1xx_ll_sdmmc.c": {
+    "mtime": 1777791577.319526,
+    "hash": "dd9afb77e4f6e7bd704d3d0993bfd7a5"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\FATFS\\App\\fatfs.c": {
+    "mtime": 1777791577.319526,
+    "hash": "a402de28df8c7eec5d6ba360c0addde4"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\FATFS\\App\\fatfs.h": {
+    "mtime": 1777791577.323679,
+    "hash": "e747ca342d1e0d9b00f4baf6f92db1a6"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\FATFS\\Target\\bsp_driver_sd.c": {
+    "mtime": 1777791577.323679,
+    "hash": "64dd5584c780859c8aee1e25cbd2ea01"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\FATFS\\Target\\bsp_driver_sd.h": {
+    "mtime": 1777791577.323679,
+    "hash": "1bb85ae4893b45622b9a0904e5dac2eb"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\FATFS\\Target\\ffconf.h": {
+    "mtime": 1777791577.323679,
+    "hash": "510fb38c1f276ddb19005d6ee4220b47"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Middlewares\\Third_Party\\FatFs\\src\\diskio.c": {
+    "mtime": 1777791577.323679,
+    "hash": "43b8cb16043978d89e166911dfa01345"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Middlewares\\Third_Party\\FatFs\\src\\diskio.h": {
+    "mtime": 1777791577.323679,
+    "hash": "9c4d4b83c2096dac1069a93e927f9f58"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Middlewares\\Third_Party\\FatFs\\src\\ff.c": {
+    "mtime": 1777791577.3297143,
+    "hash": "1a23d113452b7867c1cadaa32309b4f4"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Middlewares\\Third_Party\\FatFs\\src\\ff.h": {
+    "mtime": 1777791577.3297143,
+    "hash": "4b451ee25adb76c419f063a1306be4fe"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Middlewares\\Third_Party\\FatFs\\src\\ff_gen_drv.c": {
+    "mtime": 1777791577.3297143,
+    "hash": "a7982c1c28fe0f8232a81f27e9ae2019"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Middlewares\\Third_Party\\FatFs\\src\\ff_gen_drv.h": {
+    "mtime": 1777791577.3297143,
+    "hash": "1843358097fcf69a891385c82cb1acd7"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Middlewares\\Third_Party\\FatFs\\src\\integer.h": {
+    "mtime": 1777791577.3297143,
+    "hash": "03344cc579f973b82238e290e7a82611"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Middlewares\\Third_Party\\FatFs\\src\\drivers\\sd_diskio.c": {
+    "mtime": 1777791577.3297143,
+    "hash": "6dfa243dfba29e5d0a93a9c3cb4130d3"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Middlewares\\Third_Party\\FatFs\\src\\drivers\\sd_diskio.h": {
+    "mtime": 1777791577.3297143,
+    "hash": "4be0be7a2e561cb2e9dfa0aae83cb23c"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Middlewares\\Third_Party\\FatFs\\src\\option\\syscall.c": {
+    "mtime": 1777791577.3357732,
+    "hash": "e5334ceb1ed54d1c06cedd5a71c41e54"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\CLAUDE.md": {
+    "mtime": 1777791750.7519913,
+    "hash": "f53cab0c7cc0af565f55504954a0b55f"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\README.md": {
+    "mtime": 1777789070.0038989,
+    "hash": "73a7b9403e4654f5d430efe045ebcb5f"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\CMSIS\\LICENSE.txt": {
+    "mtime": 1771662103.6318045,
+    "hash": "c4082b6c254c9fb71136710391d9728b"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\CMSIS\\Device\\ST\\STM32F1xx\\LICENSE.txt": {
+    "mtime": 1771662115.4812024,
+    "hash": "0d777b2cce21dccb1167da7c7c539cd0"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Board2_Display\\Drivers\\STM32F1xx_HAL_Driver\\LICENSE.txt": {
+    "mtime": 1771662115.137022,
+    "hash": "f6e600c452070fd272885c362ef73853"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Synced_Keyboard.txt": {
+    "mtime": 1777791577.3418632,
+    "hash": "608db235569f9492de72549d607b6326"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\CMSIS\\LICENSE.txt": {
+    "mtime": 1777791577.2816243,
+    "hash": "c4082b6c254c9fb71136710391d9728b"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\CMSIS\\Device\\ST\\STM32F1xx\\LICENSE.txt": {
+    "mtime": 1777791577.2616205,
+    "hash": "1738ffdbb698999987cfc797226a090e"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Drivers\\STM32F1xx_HAL_Driver\\LICENSE.txt": {
+    "mtime": 1777791577.2997632,
+    "hash": "8f0c510f852957f5da06e2a3bc6b67bb"
+  },
+  "C:\\GitHub\\Synth-Keyboard\\Synced_Keyboard\\Synced_Keyboard.pdf": {
+    "mtime": 1777791577.3418632,
+    "hash": "f2c3717182537afda05fd5e5c8acb6e7"
+  }
+}
