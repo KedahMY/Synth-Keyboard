@@ -74,6 +74,11 @@ static const uint8_t rainbow_row[32] = {
 /* Note visual descriptor                                               */
 /* ------------------------------------------------------------------ */
 
+/* Ticks before a stuck growing note is force-stopped. One tick = one
+ * animation_tick() call (~1/32 s at observed frame rate), so this gives
+ * roughly 5 seconds of hold before the failsafe fires. */
+#define GROW_TIMEOUT_TICKS  (5u * HUB75_HEIGHT)
+
 typedef struct {
     uint8_t  active;
     uint8_t  col_start;
@@ -84,6 +89,7 @@ typedef struct {
     uint8_t  note_name;
     uint8_t  accidental;
     uint8_t  octave;     /* stored to compute visual block for stop_growing match */
+    uint16_t grow_ticks; /* ticks elapsed while growing; failsafe uses this */
 } ActiveNote;
 
 static ActiveNote notes[MAX_ACTIVE_NOTES];
@@ -123,7 +129,7 @@ static const uint8_t sharp_col[7] = {
 
 #define NATURAL_WIDTH   3u   /* white keys    */
 #define ACCIDENTAL_WIDTH 2u  /* black keys    */
-#define BASE_OCTAVE     3u   /* lowest octave */
+#define BASE_OCTAVE     2u   /* lowest octave */
 
 /*
  * Column at which each octave block begins.
@@ -247,6 +253,7 @@ static void spawn_note(const NoteEvent *evt) {
             notes[i].note_name  = evt->note_name;
             notes[i].accidental = evt->accidental;
             notes[i].octave     = evt->octave;
+            notes[i].grow_ticks = 0;
             return;
         }
     }
@@ -331,10 +338,11 @@ void animation_tick(void) {
             if (notes[i].length < HUB75_HEIGHT) {
                 notes[i].length++;
                 notes[i].head_y--;
-            } else {
-                /* Failsafe: note has filled the display column. Stop growing
-                 * so it scrolls away; prevents a permanently lit column if
-                 * the release packet was lost over UART. */
+            }
+            notes[i].grow_ticks++;
+            if (notes[i].grow_ticks >= GROW_TIMEOUT_TICKS) {
+                /* Failsafe: release packet was lost over UART. Stop growing
+                 * so the note scrolls away instead of pinning permanently. */
                 notes[i].growing = 0;
             }
         } else {

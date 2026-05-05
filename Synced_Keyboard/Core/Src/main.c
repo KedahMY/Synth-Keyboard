@@ -93,25 +93,27 @@ static uint32_t pressTickPerKey[3][NUM_COLS] = {{0}};
  * pressed the oldest entry is evicted (Audio_NoteOff + UART note-off).
  * A release for an already-evicted key is silently ignored. */
 #define MAX_CHORD_VOICES 4
-typedef struct { uint8_t row; uint8_t col; } VoiceSlot;
+typedef struct { uint8_t row; uint8_t col; uint8_t octave; } VoiceSlot;
 static VoiceSlot voiceWindow[MAX_CHORD_VOICES];
 static uint8_t   voiceHead = 0;   /* oldest entry (eviction point) */
 static uint8_t   voiceTail = 0;   /* next insert slot              */
 static uint8_t   voiceCount = 0;
 
-static void VoiceWindow_Push(uint8_t r, uint8_t c)
+static void VoiceWindow_Push(uint8_t r, uint8_t c, uint8_t oct)
 {
-    voiceWindow[voiceTail].row = r;
-    voiceWindow[voiceTail].col = c;
+    voiceWindow[voiceTail].row    = r;
+    voiceWindow[voiceTail].col    = c;
+    voiceWindow[voiceTail].octave = oct;
     voiceTail = (voiceTail + 1u) % MAX_CHORD_VOICES;
     voiceCount++;
 }
 
-static uint8_t VoiceWindow_Pop(uint8_t *r, uint8_t *c)
+static uint8_t VoiceWindow_Pop(uint8_t *r, uint8_t *c, uint8_t *oct)
 {
     if (voiceCount == 0u) return 0;
-    *r = voiceWindow[voiceHead].row;
-    *c = voiceWindow[voiceHead].col;
+    *r   = voiceWindow[voiceHead].row;
+    *c   = voiceWindow[voiceHead].col;
+    *oct = voiceWindow[voiceHead].octave;
     voiceHead = (voiceHead + 1u) % MAX_CHORD_VOICES;
     voiceCount--;
     return 1;
@@ -365,19 +367,17 @@ int main(void)
 	          if (r < 3) {
 	              /* ── Note key PRESS (with 4-voice cap) ── */
 	              if (voiceCount == MAX_CHORD_VOICES) {
-	                  uint8_t evR, evC;
-	                  if (VoiceWindow_Pop(&evR, &evC)) {
+	                  uint8_t evR, evC, evOct;
+	                  if (VoiceWindow_Pop(&evR, &evC, &evOct)) {
 	                      uint8_t evVoice = (uint8_t)(1u + evR * NUM_COLS + evC);
 	                      Audio_NoteOff(evVoice);
 
 	                      uint32_t evHeld = HAL_GetTick() - pressTickPerKey[evR][evC];
-	                      int evBaseOct   = (evR == 0 || (evR == 1 && evC < 4)) ? 4 : 5;
-	                      int evActualOct = evBaseOct + octaveOffset;
 	                      NoteEvent evEvt = {
 	                          .start_byte  = NOTE_EVENT_START_BYTE,
 	                          .note_name   = noteCode[evR][evC].name,
 	                          .accidental  = noteCode[evR][evC].acc,
-	                          .octave      = (uint8_t)evActualOct,
+	                          .octave      = evOct,
 	                          .velocity    = VEL_KEY_UP,
 	                          .duration_ms = (evHeld > 0xFFFFu) ? 0xFFFFu : (uint16_t)evHeld,
 	                          .track_id    = TRACK_LIVE,
@@ -392,12 +392,13 @@ int main(void)
 	                  SongPlayer_MuteForKey();
 	              }
 	              activeChordKeys++;
-	              VoiceWindow_Push(r, c);
-
-	              float freq = GetNoteFreq(r, c);
 
 	              int baseOct   = (r == 0 || (r == 1 && c < 4)) ? 4 : 5;
 	              int actualOct = baseOct + octaveOffset;
+	              VoiceWindow_Push(r, c, (uint8_t)actualOct);
+
+	              float freq = GetNoteFreq(r, c);
+
 
 	              char noteBuf[5] = {0};
 	              const char *name = keyNoteNames[r][c];

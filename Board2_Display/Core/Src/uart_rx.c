@@ -23,7 +23,8 @@
 
 static UART_HandleTypeDef huart1;
 static DMA_HandleTypeDef  hdma_usart1_rx;
-static uint8_t uart_rx_buf[NOTE_EVENT_SIZE];
+static uint8_t uart_rx_buf[2][NOTE_EVENT_SIZE];
+static uint8_t rx_active = 0;
 
 /* ------------------------------------------------------------------ */
 /* USART1 + DMA1 Channel 5 init                                        */
@@ -77,7 +78,7 @@ void uart_rx_init(void) {
      * This fires an interrupt when the UART line has been idle
      * for one byte period after receiving data, which neatly
      * frames our 8-byte packets. */
-    HAL_UARTEx_ReceiveToIdle_DMA(&huart1, uart_rx_buf, NOTE_EVENT_SIZE);
+    HAL_UARTEx_ReceiveToIdle_DMA(&huart1, uart_rx_buf[0], NOTE_EVENT_SIZE);
 
     /* Disable the DMA half-transfer interrupt (we only care about idle) */
     __HAL_DMA_DISABLE_IT(&hdma_usart1_rx, DMA_IT_HT);
@@ -95,17 +96,20 @@ void uart_rx_init(void) {
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *h, uint16_t sz) {
     if (h->Instance != USART1) return;
 
+    uint8_t just_filled = rx_active;
+    rx_active ^= 1u;
+
+    /* Re-arm onto the other buffer before reading, so DMA cannot
+     * overwrite just_filled while we copy out of it. */
+    HAL_UARTEx_ReceiveToIdle_DMA(&huart1, uart_rx_buf[rx_active], NOTE_EVENT_SIZE);
+    __HAL_DMA_DISABLE_IT(&hdma_usart1_rx, DMA_IT_HT);
+
     if (sz == NOTE_EVENT_SIZE) {
-        NoteEvent *evt = (NoteEvent *)uart_rx_buf;
+        NoteEvent *evt = (NoteEvent *)uart_rx_buf[just_filled];
         if (evt->start_byte == NOTE_EVENT_START_BYTE) {
             animation_queue_event(evt);
         }
     }
-    /* Else: partial or malformed packet, just discard and re-arm */
-
-    /* Re-arm DMA for the next packet */
-    HAL_UARTEx_ReceiveToIdle_DMA(&huart1, uart_rx_buf, NOTE_EVENT_SIZE);
-    __HAL_DMA_DISABLE_IT(&hdma_usart1_rx, DMA_IT_HT);
 }
 
 /* ------------------------------------------------------------------ */
