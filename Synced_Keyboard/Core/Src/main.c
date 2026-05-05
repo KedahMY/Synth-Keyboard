@@ -372,11 +372,12 @@ int main(void)
 
 	                      uint32_t evHeld = HAL_GetTick() - pressTickPerKey[evR][evC];
 	                      int evBaseOct   = (evR == 0 || (evR == 1 && evC < 4)) ? 4 : 5;
+	                      int evActualOct = evBaseOct + octaveOffset;
 	                      NoteEvent evEvt = {
 	                          .start_byte  = NOTE_EVENT_START_BYTE,
 	                          .note_name   = noteCode[evR][evC].name,
 	                          .accidental  = noteCode[evR][evC].acc,
-	                          .octave      = (uint8_t)evBaseOct,
+	                          .octave      = (uint8_t)evActualOct,
 	                          .velocity    = VEL_KEY_UP,
 	                          .duration_ms = (evHeld > 0xFFFFu) ? 0xFFFFu : (uint16_t)evHeld,
 	                          .track_id    = TRACK_LIVE,
@@ -491,7 +492,7 @@ int main(void)
 	                      SongPlayer_UnmuteAfterKey();
 	                      LCD_ShowSong(currentRiffName);
 	                  }
-	                  break;
+	                  continue;
 	              }
 
 	              uint8_t voice = (uint8_t)(1u + r * NUM_COLS + c);

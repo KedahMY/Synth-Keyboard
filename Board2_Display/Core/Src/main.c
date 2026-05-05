@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -87,6 +88,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
 
   hub75_gpio_init();
@@ -100,43 +102,43 @@ int main(void)
   animation_init();
   sim_init();
 
-  // /* ---- HARDWARE TEST: remove once display is confirmed working ---- */
-  // hub75_gpio_init();
-  // hub75_tim2_init();
-
-  // /* Cycle through solid colors so you can verify basic wiring */
-  // const uint8_t test_colors[] = {
-  //     COLOR_RED, COLOR_GREEN, COLOR_BLUE,
-  //     COLOR_WHITE, COLOR_CYAN, COLOR_YELLOW, COLOR_MAGENTA
-  // };
-
-  // for (int c = 0; c < 7; c++) {
-  //     /* Fill entire back buffer with one solid color */
-  //     for (int y = 0; y < HUB75_HEIGHT; y++)
-  //         for (int x = 0; x < HUB75_WIDTH; x++)
-  //             fb[fb_back][y][x] = test_colors[c];
-  //     hub75_swap_buffers();
-  //     HAL_Delay(1000);   /* hold each color for 1 second */
-  // }
-
-  // /* Column sweep: one lit column scrolling left to right */
-  // for (int x = 0; x < HUB75_WIDTH; x++) {
-  //     hub75_clear_back();
-  //     for (int y = 0; y < HUB75_HEIGHT; y++)
-  //         fb[fb_back][y][x] = COLOR_WHITE;
-  //     hub75_swap_buffers();
-  //     HAL_Delay(30);
-  // }
-
-  // /* Row sweep: one lit row scrolling top to bottom */
-  // for (int y = 0; y < HUB75_HEIGHT; y++) {
-  //     hub75_clear_back();
-  //     for (int x = 0; x < HUB75_WIDTH; x++)
-  //         fb[fb_back][y][x] = COLOR_GREEN;
-  //     hub75_swap_buffers();
-  //     HAL_Delay(60);
-  // }
-  // /* ---- END HARDWARE TEST ---- */
+//  /* ---- HARDWARE TEST: remove once display is confirmed working ---- */
+//  hub75_gpio_init();
+//  hub75_tim2_init();
+//
+//  /* Cycle through solid colors so you can verify basic wiring */
+//  const uint8_t test_colors[] = {
+//      COLOR_RED, COLOR_GREEN, COLOR_BLUE,
+//      COLOR_WHITE, COLOR_CYAN, COLOR_YELLOW, COLOR_MAGENTA
+//  };
+//
+//  for (int c = 0; c < 7; c++) {
+//      /* Fill entire back buffer with one solid color */
+//      for (int y = 0; y < HUB75_HEIGHT; y++)
+//          for (int x = 0; x < HUB75_WIDTH; x++)
+//              fb[fb_back][y][x] = test_colors[c];
+//      hub75_swap_buffers();
+//      HAL_Delay(1000);   /* hold each color for 1 second */
+//  }
+//
+//  /* Column sweep: one lit column scrolling left to right */
+//  for (int x = 0; x < HUB75_WIDTH; x++) {
+//      hub75_clear_back();
+//      for (int y = 0; y < HUB75_HEIGHT; y++)
+//          fb[fb_back][y][x] = COLOR_WHITE;
+//      hub75_swap_buffers();
+//      HAL_Delay(30);
+//  }
+//
+//  /* Row sweep: one lit row scrolling top to bottom */
+//  for (int y = 0; y < HUB75_HEIGHT; y++) {
+//      hub75_clear_back();
+//      for (int x = 0; x < HUB75_WIDTH; x++)
+//          fb[fb_back][y][x] = COLOR_GREEN;
+//      hub75_swap_buffers();
+//      HAL_Delay(60);
+//  }
+//  /* ---- END HARDWARE TEST ---- */
 
   uint32_t last_frame_tick = HAL_GetTick();
   /* USER CODE END 2 */

@@ -327,12 +327,15 @@ void animation_tick(void) {
 
         if (notes[i].growing) {
             /* Grow the trail upward while the key is held: bottom edge
-             * stays anchored at row 30, top edge advances toward row 0.
-             * Cap at HUB75_HEIGHT so indefinite holds don't grow length
-             * (and the inner draw loop) without bound. */
+             * stays anchored at row 30, top edge advances toward row 0. */
             if (notes[i].length < HUB75_HEIGHT) {
                 notes[i].length++;
                 notes[i].head_y--;
+            } else {
+                /* Failsafe: note has filled the display column. Stop growing
+                 * so it scrolls away; prevents a permanently lit column if
+                 * the release packet was lost over UART. */
+                notes[i].growing = 0;
             }
         } else {
             notes[i].head_y--;
