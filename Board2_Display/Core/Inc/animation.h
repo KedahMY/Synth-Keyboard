@@ -32,10 +32,9 @@ void animation_init(void);
 /**
  * Push a NoteEvent into the event queue.
  * Safe to call from ISR context (UART RX callback).
- * If the queue is full the oldest entry is dropped to make room,
- * ensuring release events (VEL_KEY_UP) are never lost — a dropped
- * press is less harmful than a dropped release.
- * Always returns 0.
+ * If the queue is full the new event is dropped (returns 1).
+ * The grow-timeout failsafe handles any missed key-up events.
+ * Returns 0 on success, 1 if the queue was full.
  */
 uint8_t animation_queue_event(const NoteEvent *evt);
 

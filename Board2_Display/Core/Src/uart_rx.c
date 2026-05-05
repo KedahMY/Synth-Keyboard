@@ -104,12 +104,26 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *h, uint16_t sz) {
     HAL_UARTEx_ReceiveToIdle_DMA(&huart1, uart_rx_buf[rx_active], NOTE_EVENT_SIZE);
     __HAL_DMA_DISABLE_IT(&hdma_usart1_rx, DMA_IT_HT);
 
-    if (sz == NOTE_EVENT_SIZE) {
-        NoteEvent *evt = (NoteEvent *)uart_rx_buf[just_filled];
-        if (evt->start_byte == NOTE_EVENT_START_BYTE) {
-            animation_queue_event(evt);
-        }
-    }
+    if (sz != NOTE_EVENT_SIZE) return;
+
+    NoteEvent *evt = (NoteEvent *)uart_rx_buf[just_filled];
+
+    /* Structural sanity checks — reject obviously corrupted packets before
+     * they enter the animation pipeline.  A corrupted 'active' byte is the
+     * primary cause of permanently-stuck notes: a key-up packet with
+     * active=1 spawns a ghost note that never gets stopped. */
+    if (evt->start_byte != NOTE_EVENT_START_BYTE) return;
+    if (evt->note_name  >  NOTE_B)                return;
+    if (evt->accidental >  ACC_FLAT)              return;
+    if (evt->octave < 2 || evt->octave > 7)       return;
+    if (evt->active > 1)                          return;
+    /* Board 1 always sets velocity=VEL_KEY_DOWN when active=1 and
+     * velocity=VEL_KEY_UP when active=0.  A mismatch means a byte was
+     * corrupted; drop the packet rather than misrouting it. */
+    if (evt->active == 1 && evt->velocity != VEL_KEY_DOWN) return;
+    if (evt->active == 0 && evt->velocity != VEL_KEY_UP)   return;
+
+    animation_queue_event(evt);
 }
 
 /* ------------------------------------------------------------------ */

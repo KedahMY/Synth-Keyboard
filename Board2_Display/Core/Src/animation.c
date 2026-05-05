@@ -77,7 +77,7 @@ static const uint8_t rainbow_row[32] = {
 /* Ticks before a stuck growing note is force-stopped. One tick = one
  * animation_tick() call (~1/32 s at observed frame rate), so this gives
  * roughly 5 seconds of hold before the failsafe fires. */
-#define GROW_TIMEOUT_TICKS  (5u * HUB75_HEIGHT)
+#define GROW_TIMEOUT_TICKS  (3u * HUB75_HEIGHT)
 
 typedef struct {
     uint8_t  active;
@@ -211,13 +211,7 @@ static volatile uint8_t eq_tail = 0;
 
 uint8_t animation_queue_event(const NoteEvent *evt) {
     uint8_t next = (eq_head + 1u) % EVENT_QUEUE_SIZE;
-    if (next == eq_tail) {
-        /* Queue full — drop oldest entry to make room so that release
-         * events (VEL_KEY_UP) are never lost. A dropped press is less
-         * harmful than a dropped release (which leaves a note growing
-         * permanently). */
-        eq_tail = (eq_tail + 1u) % EVENT_QUEUE_SIZE;
-    }
+    if (next == eq_tail) return 1; /* queue full — drop event */
     event_queue[eq_head] = *evt;
     eq_head = next;
     return 0;
@@ -237,6 +231,19 @@ static uint8_t queue_pop(NoteEvent *out) {
 static void spawn_note(const NoteEvent *evt) {
     uint8_t col, width;
     resolve_note_visual(evt, &col, &width);
+
+    /* Dedup: if a growing note at the same visual column already exists
+     * (e.g. duplicate key-down from UART retransmit or rapid re-press),
+     * just reset its timeout instead of consuming a second slot. */
+    for (int i = 0; i < MAX_ACTIVE_NOTES; i++) {
+        if (notes[i].active && notes[i].growing &&
+            notes[i].col_start == col && notes[i].col_width == width) {
+            notes[i].grow_ticks = 0;
+            return;
+        }
+    }
+
+    /* Find a free slot. */
     for (int i = 0; i < MAX_ACTIVE_NOTES; i++) {
         if (!notes[i].active) {
             notes[i].active     = 1;
@@ -257,6 +264,32 @@ static void spawn_note(const NoteEvent *evt) {
             return;
         }
     }
+
+    /* All slots full — evict the non-growing note that has scrolled
+     * furthest toward the top (smallest head_y); it will vanish soonest
+     * anyway.  This prevents slot exhaustion from blocking new presses. */
+    int16_t min_head = 32767;
+    int evict = -1;
+    for (int i = 0; i < MAX_ACTIVE_NOTES; i++) {
+        if (notes[i].active && !notes[i].growing && notes[i].head_y < min_head) {
+            min_head = notes[i].head_y;
+            evict    = i;
+        }
+    }
+    if (evict >= 0) {
+        notes[evict].active     = 1;
+        notes[evict].col_start  = col;
+        notes[evict].col_width  = width;
+        notes[evict].head_y     = 30;
+        notes[evict].length     = 1;
+        notes[evict].growing    = 1;
+        notes[evict].note_name  = evt->note_name;
+        notes[evict].accidental = evt->accidental;
+        notes[evict].octave     = evt->octave;
+        notes[evict].grow_ticks = 0;
+    }
+    /* If every slot is a stuck-growing note, drop — the timeout will
+     * clear them within GROW_TIMEOUT_TICKS ticks. */
 }
 
 /*
