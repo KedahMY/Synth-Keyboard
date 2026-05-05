@@ -5,9 +5,9 @@
  * Column layout (64px wide, 2 octaves):
  *
  *   col  0        : left margin (empty)
- *   cols 1..31    : even octaves (2, 4, 6 — wraps modulo 2)
+ *   cols 1..31    : octave 3  (31px)
  *   col  32       : gap between octaves (empty)
- *   cols 33..63   : odd octaves  (3, 5, 7 — wraps modulo 2)
+ *   cols 33..63   : octave 4  (31px)
  *
  * Within each 31px octave block the keys sit like a real piano:
  *   natural (white) keys : 3px wide, laid end-to-end
@@ -123,12 +123,12 @@ static const uint8_t sharp_col[7] = {
 
 #define NATURAL_WIDTH   3u   /* white keys    */
 #define ACCIDENTAL_WIDTH 2u  /* black keys    */
-#define BASE_OCTAVE     2u   /* Display even octaves in left block (col 1–31) */
+#define BASE_OCTAVE     3u   /* lowest octave */
 
 /*
  * Column at which each octave block begins.
- *   Even octaves (2,4,6): col 1  (1px left margin)
- *   Odd  octaves (3,5,7): col 33 (col 1 + 31px block + 1px gap)
+ *   Octave 3: col 1  (1px left margin)
+ *   Octave 4: col 33 (col 1 + 31px block + 1px gap)
  * Formula: block_start = 1 + (oct - BASE_OCTAVE) * 32
  */
 #define OCTAVE_STRIDE   32u  /* 31px block + 1px gap */
@@ -144,18 +144,19 @@ static void resolve_note_visual(const NoteEvent *evt,
 {
     /*
      * Map any octave to one of the two display blocks using signed modulo.
-     * Notes an octave apart land in adjacent blocks; notes 2 octaves apart
-     * share the same physical key and must map to the same visual column.
+     * Notes 2 octaves apart share the same physical key on the keyboard and
+     * must land in the same visual column. Wrapping preserves that invariant;
+     * clamping broke it (e.g. C2 clamped to octave 3 when it should share
+     * octave 4's block with C4 after a -2 octave shift).
      *
      *   block_idx = ((oct - BASE_OCTAVE) % 2 + 2) % 2
      *
-     *   oct=2 (BASE)  : (0%2+2)%2  = 0 -> left block  (col  1)
-     *   oct=3         : (1%2+2)%2  = 1 -> right block (col 33)
-     *   oct=4         : (2%2+2)%2  = 0 -> left block  (col  1) same as C2
-     *   oct=5         : (3%2+2)%2  = 1 -> right block (col 33) same as C3
-     *   oct=1         : (-1%2+2)%2 = 1 -> right block (col 33) same as C3
-     *   oct=6         : (4%2+2)%2  = 0 -> left block  (col  1) same as C2
-     *   oct=7         : (5%2+2)%2  = 1 -> right block (col 33) same as C3
+     *   oct=3 (BASE)  : (0%2+2)%2 = 0  -> left block  (col  1)
+     *   oct=4         : (1%2+2)%2 = 1  -> right block (col 33)
+     *   oct=2 (C4-2)  : (-1%2+2)%2 = 1 -> right block (col 33) same as C4
+     *   oct=5 (C3+2)  : (2%2+2)%2 = 0  -> left block  (col  1) same as C3
+     *   oct=1         : (-2%2+2)%2 = 0  -> left block
+     *   oct=6         : (3%2+2)%2 = 1  -> right block
      */
     int8_t  oct_diff  = (int8_t)evt->octave - (int8_t)BASE_OCTAVE;
     uint8_t block_idx = (uint8_t)(((int8_t)(oct_diff % 2) + 2) % 2);
@@ -253,10 +254,10 @@ static void spawn_note(const NoteEvent *evt) {
 
 /*
  * Resolve an octave value to its visual block index (0 or 1) on the
- * 64px display. Even octaves (2,4,6) map to left block; odd (3,5,7)
- * to right block — same wrapping as resolve_note_visual(). This lets
- * stop_growing match a release to its press even if octaveOffset
- * changed between the two events.
+ * 64px display. Notes that are an octave apart wrap to the same block
+ * so that e.g. C4 with octaveOffset=0 and C4 with octaveOffset=+2
+ * land on the same physical column. This is the same wrapping used
+ * by resolve_note_visual() during spawn.
  */
 static uint8_t octave_to_visual_block(uint8_t oct)
 {
